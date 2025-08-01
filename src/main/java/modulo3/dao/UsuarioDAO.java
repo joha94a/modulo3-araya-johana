@@ -7,10 +7,10 @@ import modulo3.modelo.entidad.Usuario;
 
 public interface UsuarioDAO {
 	
-	public void guardar(Usuario user);
-	public void modificar(Usuario user);
-	public List<Usuario> listarTodos();
-	public void eliminar(Usuario user);
+	public void guardar(Usuario user) throws SQLException;
+	public void modificar(Usuario user) throws SQLException;
+	public List<Usuario> listarTodos() throws SQLException;
+	public void eliminar(int id) throws SQLException;
 	public Usuario listarPorId(int id) throws SQLException;
 	
 }

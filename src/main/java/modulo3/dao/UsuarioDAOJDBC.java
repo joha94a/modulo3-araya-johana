@@ -4,21 +4,25 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import modulo3.modelo.entidad.Usuario;
 
 public class UsuarioDAOJDBC implements UsuarioDAO{
 	
-	//private static final String INSERT = "INSERT INTO usuario(nombre, email) VALUES (?, ?)";
-   // private static final String SELECT_TODOS = "SELECT * FROM usuario";
+	private static final String INSERT = "INSERT INTO usuario (nombreUsuario,email,contraseña,rol,estado) VALUES (?, ?, ?, ?, ?)";
+	private static final String SELECT_TODOS = "SELECT * FROM usuario";
+	private static final String CAMBIAR_ESTADO = "UPDATE usuario SET estado = FALSE WHERE id = ?";
+	private static final String LISTAR_POR_ID = "SELECT * FROM usuario WHERE id = ?";
+	private static final String UPDATE = "UPDATE usuario SET nombreUsuario = ?, email = ?, contraseña = ?, rol = ?, estado = ? WHERE id = ?";
+
 	
 	public Usuario listarPorId(int id) {
-		 String sql = "SELECT * FROM usuario WHERE id = ?";
 	     Usuario usuario = null;
 
 	     try (Connection conn = ConexionBD.getConexion();
-	          PreparedStatement ps = conn.prepareStatement(sql)) {
+	          PreparedStatement ps = conn.prepareStatement(LISTAR_POR_ID)) {
 	    	 
 	    	 	ps.setInt(1, id);
 	            ResultSet rs = ps.executeQuery();
@@ -44,18 +48,74 @@ public class UsuarioDAOJDBC implements UsuarioDAO{
 	
 	
 	public void guardar(Usuario user) {
+		try (Connection conn = ConexionBD.getConexion();
+		          PreparedStatement ps = conn.prepareStatement(INSERT)) {
+			
+		        ps.setString(1, user.getNombreUsuario());
+		        ps.setString(2, user.getEmail());
+		        ps.setString(3, user.getContraseña());
+		        ps.setString(4, user.getRol());
+		        ps.setBoolean(5, user.getEstado());
+		        ps.executeUpdate();
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
 	}
 	
 	public void modificar(Usuario user) {
+	
+		try (Connection conn = ConexionBD.getConexion();
+		          PreparedStatement ps = conn.prepareStatement(UPDATE)) {
+			
+	        ps.setString(1, user.getNombreUsuario());
+	        ps.setString(2, user.getEmail());
+	        ps.setString(3, user.getContraseña());
+	        ps.setString(4, user.getRol());
+	        ps.setBoolean(5, user.getEstado());
+	        ps.setInt(6, user.getIdUsuario());
+	        ps.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
 	
 	public List<Usuario> listarTodos() {
-		return null;
+		List<Usuario> usuarios = new ArrayList<>();
+
+	     try (Connection conn = ConexionBD.getConexion();
+	          PreparedStatement ps = conn.prepareStatement(SELECT_TODOS)) {
+	    	 
+	            ResultSet rs = ps.executeQuery();
+
+	            while (rs.next()) {
+	                Usuario usuario = new Usuario(
+	                    rs.getInt("id"),
+	                    rs.getString("nombreUsuario"),
+	                    rs.getString("email"),
+	                    rs.getString("contraseña"),
+	                    rs.getString("rol"),
+	                    rs.getBoolean("estado")
+	                );
+	                usuarios.add(usuario);
+	            }
+
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+
+	        return usuarios;
+		
 	}
 	
-	public void eliminar(Usuario user) {
+	//cambia el estado a falso
+	public void eliminar(int id) {
+		try (Connection conn = ConexionBD.getConexion();
+		          PreparedStatement ps = conn.prepareStatement(CAMBIAR_ESTADO)) {
+	        ps.setInt(1, id);
+	        ps.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
 	
-
-
 }
