@@ -13,9 +13,9 @@ public class UsuarioDAOJDBC implements UsuarioDAO{
 	
 	private static final String INSERT = "INSERT INTO usuario (nombreUsuario,email,contraseña,rol,estado) VALUES (?, ?, ?, ?, ?)";
 	private static final String SELECT_TODOS = "SELECT * FROM usuario";
-	private static final String CAMBIAR_ESTADO = "UPDATE usuario SET estado = FALSE WHERE id = ?";
-	private static final String LISTAR_POR_ID = "SELECT * FROM usuario WHERE id = ?";
-	private static final String UPDATE = "UPDATE usuario SET nombreUsuario = ?, email = ?, contraseña = ?, rol = ?, estado = ? WHERE id = ?";
+	private static final String CAMBIAR_ESTADO = "UPDATE usuario SET estado = FALSE WHERE idUsuario = ?";
+	private static final String LISTAR_POR_ID = "SELECT * FROM usuario WHERE idUsuario = ?";
+	private static final String UPDATE = "UPDATE usuario SET nombreUsuario = ?, email = ?, contraseña = ?, rol = ?, estado = ? WHERE idUsuario = ?";
 
 	
 	public Usuario listarPorId(int id) {
@@ -29,7 +29,7 @@ public class UsuarioDAOJDBC implements UsuarioDAO{
 
 	            if (rs.next()) {
 	                usuario = new Usuario(
-	                    rs.getInt("id"),
+	                    rs.getInt("idUsuario"),
 	                    rs.getString("nombreUsuario"),
 	                    rs.getString("email"),
 	                    rs.getString("contraseña"),
@@ -89,7 +89,7 @@ public class UsuarioDAOJDBC implements UsuarioDAO{
 
 	            while (rs.next()) {
 	                Usuario usuario = new Usuario(
-	                    rs.getInt("id"),
+	                    rs.getInt("idUsuario"),
 	                    rs.getString("nombreUsuario"),
 	                    rs.getString("email"),
 	                    rs.getString("contraseña"),

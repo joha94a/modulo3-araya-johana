@@ -1,13 +1,25 @@
 package modulo3.modelo.entidad;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Usuario {
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idUsuario;
+	
     private String nombreUsuario;
     private String email;
     private String contraseña;
     private String rol; // deberia ser Enum 
     private boolean estado;
     
+ // Constructor por defecto requerido por JPA
+    public Usuario() {
+    }
 
     public Usuario(int idUsuario, String nombreUsuario, String email, String contraseña, String rol, boolean estado) {
 		super();
