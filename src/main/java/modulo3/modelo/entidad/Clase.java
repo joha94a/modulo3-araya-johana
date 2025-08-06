@@ -24,6 +24,7 @@ public class Clase {
 		this.estado = estado;
 	}
 
+	public Clase() {}
 
 	public int getIdClase() {
 		return idClase;

@@ -47,7 +47,6 @@ public class UsuarioDAOJDBC implements UsuarioDAO{
 	}
 	
 	
-	
 	public void guardar(Usuario user) {
 		try (Connection conn = ConexionBD.getConexion();
 		          PreparedStatement ps = conn.prepareStatement(INSERT)) {
@@ -105,7 +104,6 @@ public class UsuarioDAOJDBC implements UsuarioDAO{
 	        }
 
 	        return usuarios;
-		
 	}
 	
 	//cambia el estado a falso

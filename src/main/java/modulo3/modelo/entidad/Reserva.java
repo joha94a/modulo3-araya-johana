@@ -28,6 +28,10 @@ public class Reserva {
 		this.estado = estado;
 	}
 
+	public Reserva() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getIdReserva() {
 		return idReserva;
 	}
