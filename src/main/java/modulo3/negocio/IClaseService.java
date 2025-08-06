@@ -8,6 +8,6 @@ public interface IClaseService {
  	public void nuevaClase(Clase clase);
 	public void modificarReserva(Clase clase);
 	public List<Clase> listarReservas();
-	public void cambiarEstado(int id);
+	public boolean cambiarEstado(int id);
 	public Clase obtenerPorId(int id);
 }
