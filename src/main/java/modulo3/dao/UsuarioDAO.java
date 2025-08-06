@@ -12,5 +12,6 @@ public interface UsuarioDAO {
 	public List<Usuario> listarTodos() throws SQLException;
 	public void eliminar(int id) throws SQLException;
 	public Usuario listarPorId(int id) throws SQLException;
+	public boolean existeEmail(String email) throws SQLException;
 	
 }

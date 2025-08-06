@@ -13,9 +13,10 @@ public class UsuarioDAOJDBC implements UsuarioDAO{
 	
 	private static final String INSERT = "INSERT INTO usuario (nombreUsuario,email,contraseña,rol,estado) VALUES (?, ?, ?, ?, ?)";
 	private static final String SELECT_TODOS = "SELECT * FROM usuario";
-	private static final String CAMBIAR_ESTADO = "UPDATE usuario SET estado = FALSE WHERE id = ?";
-	private static final String LISTAR_POR_ID = "SELECT * FROM usuario WHERE id = ?";
-	private static final String UPDATE = "UPDATE usuario SET nombreUsuario = ?, email = ?, contraseña = ?, rol = ?, estado = ? WHERE id = ?";
+	private static final String CAMBIAR_ESTADO = "UPDATE usuario SET estado = FALSE WHERE idUsuario = ?";
+	private static final String LISTAR_POR_ID = "SELECT * FROM usuario WHERE idUsuario = ?";
+	private static final String UPDATE = "UPDATE usuario SET nombreUsuario = ?, email = ?, contraseña = ?, rol = ?, estado = ? WHERE idUsuario = ?";
+	private static final String ENCONTRAR_EMAIL = "SELECT COUNT(*) FROM usuario WHERE email = ?";
 
 	
 	public Usuario listarPorId(int id) {
@@ -116,6 +117,28 @@ public class UsuarioDAOJDBC implements UsuarioDAO{
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
+	}
+
+
+
+	@Override
+	public boolean existeEmail(String email) throws SQLException {
+
+	     try (Connection conn = ConexionBD.getConexion();
+	          PreparedStatement ps = conn.prepareStatement(ENCONTRAR_EMAIL)) {
+	    	 
+	    	 	ps.setString(1, email);
+	            ResultSet rs = ps.executeQuery();
+
+	            if (rs.next()) {
+	                return rs.getInt(1) > 0;
+	            }
+
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+
+	        return false;
 	}
 	
 }
