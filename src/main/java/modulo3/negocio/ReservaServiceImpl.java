@@ -7,8 +7,10 @@ import modulo3.dao.ClaseDAO;
 import modulo3.dao.ReservaDAO;
 import modulo3.dao.UsuarioDAO;
 import modulo3.excepciones.ReservaException;
+import modulo3.excepciones.UsuarioException;
 import modulo3.modelo.dto.ReservaDTO;
 import modulo3.modelo.entidad.Reserva;
+import modulo3.modelo.entidad.Usuario;
 
 
 public class ReservaServiceImpl implements IReservaService{
@@ -47,13 +49,29 @@ public class ReservaServiceImpl implements IReservaService{
 			throw new RuntimeException("No se pudo crear la reserva", e);
 		}
 
-
-		
 	}
 
 	@Override
 	public void modificarReserva(ReservaDTO reserva) throws ReservaException {
-		// TODO Auto-generated method stub
+		try {
+			Reserva reservaExistente = reservaDAO.listarPorId(reserva.getIdReserva());
+
+			if (reservaExistente == null) {
+				throw new ReservaException("La reserva no existe.");
+			}
+
+			// antes de crear una reserva valido que el mismo usuario ya no tenga una asignada ese dia
+			if(reservaDAO.yaReservado(reserva.getUsuario().getIdUsuario(), reserva.getFechaReserva())) {
+				throw new ReservaException("El usuario ya reservo en esta fecha y hora");
+			}
+			
+			reservaExistente.setUsuario(reserva.getUsuario());
+			reservaDAO.modificar(reservaExistente);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new ReservaException("Error al modificar la reserva: " + e.getMessage());
+		}
 		
 	}
 

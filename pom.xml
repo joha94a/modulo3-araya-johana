@@ -32,5 +32,32 @@
 	</dependency>
 
   </dependencies>
+  
+	  <build>
+	  <plugins>
+	    <plugin>
+	      <groupId>io.swagger.core.v3</groupId>
+	      <artifactId>swagger-maven-plugin</artifactId>
+	      <version>2.2.20</version> 
+	      <executions>
+	        <execution>
+	          <phase>compile</phase>
+	          <goals>
+	            <goal>resolve</goal>
+	          </goals>
+	          <configuration>
+	            <resourcePackages>
+	              <package>modulo3.controller</package> <!-- paquete base -->
+	            </resourcePackages>
+	            <outputFileName>openapi</outputFileName>
+	            <outputFormat>YAML</outputFormat>
+	            <outputPath>${project.basedir}/docs</outputPath>
+	          </configuration>
+	        </execution>
+	      </executions>
+	    </plugin>
+	  </plugins>
+	</build>
+  
 </project>
 

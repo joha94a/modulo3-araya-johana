@@ -1,0 +1,148 @@
+openapi: 3.0.1
+paths:
+  /clases/{id}:
+    delete:
+      summary: Eliminar una clase (cambia el estado a false)
+      operationId: eliminarClase
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Clase eliminada correctamente
+        "404":
+          description: Clase no encontrada
+        "500":
+          description: Error interno
+  /reservas:
+    get:
+      summary: Listar todas las reservas
+      operationId: listarReservas
+      responses:
+        "200":
+          description: Lista de reservas obtenida
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReservaDTO'
+        "500":
+          description: Error interno
+  /usuarios:
+    get:
+      summary: Listar todos los usuarios
+      operationId: listarUsuarios
+      responses:
+        "200":
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsuarioDTO'
+        "500":
+          description: Error interno
+    post:
+      summary: Crear un nuevo usuario
+      operationId: crearUsuario
+      responses:
+        "200":
+          description: Usuario creado exitosamente
+        "400":
+          description: Error al crear el usuario
+  /usuarios/{id}:
+    get:
+      summary: Obtener un usuario por ID
+      operationId: obtenerUsuarioPorId
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioDTO'
+        "404":
+          description: Usuario no encontrado
+components:
+  schemas:
+    Clase:
+      type: object
+      properties:
+        idClase:
+          type: integer
+          format: int32
+        nombre:
+          type: string
+        capacidad:
+          type: integer
+          format: int32
+        profesor:
+          $ref: '#/components/schemas/Usuario'
+        diaHora:
+          type: string
+          format: date-time
+        duracionMin:
+          type: integer
+          format: int32
+        estado:
+          type: boolean
+    ReservaDTO:
+      type: object
+      properties:
+        idReserva:
+          type: integer
+          format: int32
+        usuario:
+          $ref: '#/components/schemas/Usuario'
+        clase:
+          $ref: '#/components/schemas/Clase'
+        fechaReserva:
+          type: string
+          format: date-time
+        estado:
+          type: string
+    Usuario:
+      type: object
+      properties:
+        idUsuario:
+          type: integer
+          format: int32
+        nombreUsuario:
+          type: string
+        email:
+          type: string
+        contraseña:
+          type: string
+        rol:
+          type: string
+        estado:
+          type: boolean
+    UsuarioDTO:
+      type: object
+      properties:
+        idUsuario:
+          type: integer
+          format: int32
+        nombreUsuario:
+          type: string
+        email:
+          type: string
+        contraseña:
+          type: string
+        rol:
+          type: string
+        estado:
+          type: boolean
