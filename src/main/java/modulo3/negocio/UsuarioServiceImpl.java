@@ -121,7 +121,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		return null;
 	}
 
-	public static UsuarioDTO convertirADTO(Usuario usuario) {
+	public UsuarioDTO convertirADTO(Usuario usuario) {
 		UsuarioDTO dto = new UsuarioDTO();
 		dto.setIdUsuario(usuario.getIdUsuario());
 		dto.setNombreUsuario(usuario.getNombreUsuario());
@@ -131,7 +131,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		return dto;
 	}
 
-	public static Usuario convertirAEntidad(UsuarioDTO dto) {
+	public Usuario convertirAEntidad(UsuarioDTO dto) {
 		Usuario usuario = new Usuario();
 		usuario.setIdUsuario(dto.getIdUsuario());
 		usuario.setNombreUsuario(dto.getNombreUsuario());
