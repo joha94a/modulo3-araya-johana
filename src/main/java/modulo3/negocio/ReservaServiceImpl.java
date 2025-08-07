@@ -9,9 +9,9 @@ import modulo3.dao.UsuarioDAO;
 import modulo3.excepciones.ReservaException;
 import modulo3.excepciones.UsuarioException;
 import modulo3.modelo.dto.ReservaDTO;
+import modulo3.modelo.dto.UsuarioDTO;
 import modulo3.modelo.entidad.Reserva;
 import modulo3.modelo.entidad.Usuario;
-
 
 public class ReservaServiceImpl implements IReservaService{
 	
@@ -83,17 +83,39 @@ public class ReservaServiceImpl implements IReservaService{
 
 	@Override
 	public void cambiarEstado(int id) throws ReservaException {
-		// TODO Auto-generated method stub
+		try {
+			Reserva reservaExistente = reservaDAO.listarPorId(id);
+
+			if (reservaExistente == null) {
+				throw new ReservaException("La reserva no existe.");
+			}
+			//cambia el estado a "CANCELADA"
+			reservaDAO.eliminar(id);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new ReservaException("Error al modificar la reserva: " + e.getMessage());
+		}
 		
 	}
 
 	@Override
-	public ReservaDTO obtenerPorId(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ReservaDTO obtenerPorId(int id) throws ReservaException {
+		try {
+			Reserva reserva = reservaDAO.listarPorId(id);
+			if (reserva != null) {
+				return convertirADTO(reserva);
+			}
+			else {
+	            throw new ReservaException("No se encontró una reserva con el ID: " + id);
+	        }
+		} catch (SQLException e) {
+			throw new ReservaException("Error al buscar la reserva: " + e.getMessage());
+		}
 	}
 	
-	public static Reserva convertirAEntidad(ReservaDTO dto) {
+	@Override
+	public Reserva convertirAEntidad(ReservaDTO dto) {
 		Reserva reserva = new Reserva();
 		reserva.setUsuario(dto.getUsuario());
 		reserva.setClase(dto.getClase());
@@ -101,6 +123,18 @@ public class ReservaServiceImpl implements IReservaService{
 		reserva.setEstado(dto.getEstado());
 		
 		return reserva;
+	}
+	
+	@Override
+	public ReservaDTO convertirADTO(Reserva reserva) {
+		ReservaDTO dto = new ReservaDTO();
+		
+		dto.setIdReserva(reserva.getIdReserva());
+		dto.setUsuario(reserva.getUsuario());
+		dto.setClase(reserva.getClase());
+		dto.setFechaReserva(reserva.getFechaReserva());
+		dto.setEstado(reserva.getEstado());
+		return dto;
 	}
 
 }
